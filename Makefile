@@ -1,4 +1,4 @@
-.PHONY: build test race cover lint windows run format
+.PHONY: build test race cover lint windows run format icon
 
 run:
 	go run .
@@ -18,8 +18,11 @@ cover:
 lint:
 	golangci-lint run
 
-windows:
-	GOOS=windows GOARCH=amd64 go build -o tetris.exe .
+windows: icon
+	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -H windowsgui" -o tetris.exe .
+
+icon:
+	go run github.com/tc-hib/go-winres@v0.3.3 simply --icon internal/icon/icon.ico --manifest gui --arch amd64,arm64
 
 format:
 	goimports -w .

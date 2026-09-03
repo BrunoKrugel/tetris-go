@@ -2,8 +2,11 @@ package main
 
 import (
 	"bytes"
+	_ "embed"
 	"fmt"
+	"image"
 	"image/color"
+	_ "image/png"
 	"strings"
 	"tetris-go/internal/board"
 	"tetris-go/internal/game"
@@ -15,6 +18,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"golang.org/x/image/font/gofont/goregular"
 )
+
+//go:embed internal/icon/icon.png
+var iconPNG []byte
 
 const (
 	cellSize  = 32
@@ -245,11 +251,21 @@ func (a *App) drawOverlay(screen *ebiten.Image, msg string) {
 }
 
 func main() {
+	icon, err := pngToImage(iconPNG)
+	if err != nil {
+		panic(err)
+	}
+	ebiten.SetWindowIcon([]image.Image{icon})
 	ebiten.SetWindowSize(winW, winH)
 	ebiten.SetWindowTitle("Tetris")
 	if err := ebiten.RunGame(NewApp()); err != nil {
 		panic(err)
 	}
+}
+
+func pngToImage(b []byte) (image.Image, error) {
+	img, _, err := image.Decode(bytes.NewReader(b))
+	return img, err
 }
 
 func drawRect(screen *ebiten.Image, x, y, w, h int, clr color.Color) {

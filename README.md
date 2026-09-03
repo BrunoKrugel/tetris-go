@@ -33,7 +33,7 @@ make run        # or: go run .
 make test       # unit tests
 make race       # race detector
 make cover      # coverage report
-make windows    # cross-compile tetris.exe (Windows x64)
+make windows    # cross-compile tetris.exe (Windows x64, com ícone e sem console)
 ```
 
 Architecture: pure game engine in `internal/` (no Ebiten dependency) —

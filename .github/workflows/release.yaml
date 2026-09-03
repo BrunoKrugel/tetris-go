@@ -58,6 +58,9 @@ jobs:
           git tag -a "$new" -m "Release $new"
           git push origin "$new"
 
+      - name: Generate Windows icon resources
+        run: make icon
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
