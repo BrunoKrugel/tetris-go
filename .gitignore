@@ -3,3 +3,4 @@ golangci-lint.xml
 tetris.exe
 coverage.out
 AGENTS.md
+*.json
