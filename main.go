@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	ebitentext "github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"golang.org/x/image/font/gofont/goregular"
 )
@@ -52,15 +52,15 @@ var (
 	ctrlBg     = color.RGBA{15, 15, 25, 255}
 )
 
-var bigFace, smallFace *text.GoTextFace
+var bigFace, smallFace *ebitentext.GoTextFace
 
 func init() {
-	src, err := text.NewGoTextFaceSource(bytes.NewReader(goregular.TTF))
+	src, err := ebitentext.NewGoTextFaceSource(bytes.NewReader(goregular.TTF))
 	if err != nil {
 		panic(err)
 	}
-	bigFace = &text.GoTextFace{Source: src, Size: 28}
-	smallFace = &text.GoTextFace{Source: src, Size: 18}
+	bigFace = &ebitentext.GoTextFace{Source: src, Size: 28}
+	smallFace = &ebitentext.GoTextFace{Source: src, Size: 18}
 }
 
 type App struct {
@@ -243,7 +243,7 @@ func (a *App) drawOverlay(screen *ebiten.Image, msg string) {
 	drawRect(screen, 0, 0, winW, winH, overlayBg)
 	lines := strings.Split(msg, "\n")
 	for i, line := range lines {
-		adv, _ := text.Measure(line, bigFace, 0)
+		adv, _ := ebitentext.Measure(line, bigFace, 0)
 		x := int((float64(winW) - adv) / 2)
 		y := winH/2 - len(lines)*20 + i*40
 		drawText(screen, line, x, y, bigFace)
@@ -272,9 +272,9 @@ func drawRect(screen *ebiten.Image, x, y, w, h int, clr color.Color) {
 	vector.FillRect(screen, float32(x), float32(y), float32(w), float32(h), clr, false)
 }
 
-func drawText(screen *ebiten.Image, txt string, x, y int, f *text.GoTextFace) {
-	op := &text.DrawOptions{}
+func drawText(screen *ebiten.Image, txt string, x, y int, f *ebitentext.GoTextFace) {
+	op := &ebitentext.DrawOptions{}
 	op.GeoM.Translate(float64(x), float64(y))
 	op.ColorScale.ScaleWithColor(textColor)
-	text.Draw(screen, txt, f, op)
+	ebitentext.Draw(screen, txt, f, op)
 }
