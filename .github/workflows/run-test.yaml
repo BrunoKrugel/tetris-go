@@ -21,7 +21,7 @@ jobs:
           go-version: 'stable'
 
       - name: Install X11 headers (Ebiten Linux build)
-        run: sudo apt-get update && sudo apt-get install -y libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libgl1-mesa-dev libasound2-dev
+        run: sudo apt-get update && sudo apt-get install -y libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libxxf86vm-dev libgl1-mesa-dev libasound2-dev
 
       - name: Lint
         uses: golangci/golangci-lint-action@v8
