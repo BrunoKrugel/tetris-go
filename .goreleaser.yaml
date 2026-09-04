@@ -1,0 +1,90 @@
+version: 2
+
+project_name: tetris-go
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: tetris
+    main: .
+    binary: tetris
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -H windowsgui
+
+archives:
+  - formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  version_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  use: git
+  filters:
+    exclude:
+      - "^test:"
+      - "^test\\("
+      - "^chore: typo$"
+      - "^chore\\(deps\\): "
+      - "^(build|ci): "
+      - "^(build|ci)\\(.*\\): "
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+      - go mod tidy
+  groups:
+    - title: "New features"
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 100
+    - title: "Bug fixes"
+      regexp: '^.*?(fix|refactor|test)(\(.+\))??!?:.+$'
+      order: 200
+    - title: "Documentation updates"
+      regexp: ^.*?docs?(\(.+\))??!?:.+$
+      order: 400
+    - title: Other work
+      order: 9999
+
+release:
+  github:
+    owner: BrunoKrugel
+    name: tetris-go
+  draft: false
+  prerelease: auto
+  mode: replace
+  header: |
+    ## Tetris {{ .Tag }}
+
+    Jogo de Tetris em Go (Ebiten). Baixe o zip do seu Windows,
+    extraia e dê duplo clique em `tetris.exe` — não precisa instalar nada.
+
+    - **Windows 64 bits (Intel/AMD)**: `tetris-go_Windows_x86_64.zip`
+    - **Windows ARM**: `tetris-go_Windows_arm64.zip`
+
+  footer: |
+
+    ---
+
+    **Full Changelog**: https://github.com/BrunoKrugel/tetris-go/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+    Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
